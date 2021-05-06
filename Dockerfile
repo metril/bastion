@@ -1,7 +1,7 @@
 ##
 ## Base builder image
 ##
-FROM alpine:3.8 as builder
+FROM alpine:3.13 as builder
 
 RUN apk --update add --virtual .build-deps build-base automake autoconf libtool git linux-pam-dev openssl-dev wget
 
@@ -11,7 +11,7 @@ RUN apk --update add --virtual .build-deps build-base automake autoconf libtool 
 ##
 FROM builder as duo-builder
 
-ARG DUO_VERSION=1.10.5
+ARG DUO_VERSION=1.11.4
 RUN wget https://dl.duosecurity.com/duo_unix-${DUO_VERSION}.tar.gz && \
     mkdir -p src && \
     tar -zxf duo_unix-${DUO_VERSION}.tar.gz --strip-components=1 -C src
@@ -45,7 +45,7 @@ RUN cd src && \
 ##
 FROM builder as openssh-portable-builder
 
-ARG OPENSSH_VERSION=V_7_8_P1
+ARG OPENSSH_VERSION=V_8_6_P1
 RUN git clone --branch ${OPENSSH_VERSION} --single-branch https://github.com/openssh/openssh-portable src
 
 COPY patches/ /patches/
@@ -74,7 +74,7 @@ RUN cd src && \
 ##
 ## Bastion image
 ##
-FROM alpine:3.8
+FROM alpine:3.13
 
 LABEL maintainer="erik@cloudposse.com"
 
@@ -90,7 +90,7 @@ RUN apk --update add curl drill groff util-linux bash xauth gettext openssl-dev 
     mv /etc/profile.d/color_prompt /etc/profile.d/color_prompt.sh
 
 ## Install sudosh
-ENV SUDOSH_VERSION=0.1.3
+ENV SUDOSH_VERSION=0.3.0
 RUN wget https://github.com/cloudposse/sudosh/releases/download/${SUDOSH_VERSION}/sudosh_linux_386 -O /usr/bin/sudosh && \
     chmod 755 /usr/bin/sudosh
 
