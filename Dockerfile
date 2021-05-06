@@ -3,7 +3,7 @@
 ##
 FROM alpine:3.13 as builder
 
-RUN apk --update add --virtual .build-deps build-base automake autoconf libtool git linux-pam-dev openssl-dev wget
+RUN apk --update add --virtual .build-deps build-base automake autoconf libtool git linux-pam-dev openssl-dev wget zlib-dev
 
 
 ##
